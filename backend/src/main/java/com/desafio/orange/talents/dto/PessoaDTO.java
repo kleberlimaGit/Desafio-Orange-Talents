@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
-import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -16,9 +15,6 @@ import com.desafio.orange.talents.domain.Pessoa;
 
 public class PessoaDTO implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
@@ -27,11 +23,10 @@ public class PessoaDTO implements Serializable{
 	private String name;
 	
 	@NotBlank(message = "Campo email não pode ficar em branco.")
-	@Email(regexp = "^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$", message = "Por favor digite um email válido.")
+	@Email(regexp = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$", message = "Por favor digite um email válido.")
 	private String email;
 	
-	@NotBlank(message = "Campo email não pode ficar em branco.")
-	@CPF
+	@NotBlank(message = "Campo cpf não pode ficar em branco.")
 	private String cpf;
 	
 	
