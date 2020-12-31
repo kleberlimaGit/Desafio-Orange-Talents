@@ -20,18 +20,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.desafio.orange.talents.dto.PessoaDTO;
-import com.desafio.orange.talents.services.PessoaService;
+import com.desafio.orange.talents.dto.ClienteDTO;
+import com.desafio.orange.talents.services.ClienteService;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 @RestController
-@RequestMapping("/pessoas")
-public class PessoaController {
+@RequestMapping("/clientes")
+public class ClienteController {
 
 	@Autowired
-	private PessoaService service;
+	private ClienteService service;
 	
 	@GetMapping
-	public ResponseEntity<Page<PessoaDTO>> findAll(
+	public ResponseEntity<Page<ClienteDTO>> findAll(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction,
@@ -39,24 +40,24 @@ public class PessoaController {
 		
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		
-		Page<PessoaDTO> pageList = service.findAllPaged(pageRequest);
+		Page<ClienteDTO> pageList = service.findAllPaged(pageRequest);
 		
 		return ResponseEntity.ok().body(pageList);
 	
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<PessoaDTO> findById(@PathVariable Long id){
+	public ResponseEntity<ClienteDTO> findById(@PathVariable Long id){
 		
-		PessoaDTO dto = service.findById(id);
+		ClienteDTO dto = service.findById(id);
 		
 		return ResponseEntity.ok().body(dto);
 	}
 	
 	
 	@PostMapping
-	public ResponseEntity<PessoaDTO> insert(@Valid @RequestBody PessoaDTO dto){
-		PessoaDTO newDto = service.insertPessoa(dto);
+	public ResponseEntity<ClienteDTO> insert(@Valid @RequestBody ClienteDTO dto){
+		ClienteDTO newDto = service.insertCliente(dto);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 					.buildAndExpand(newDto.getId()).toUri();
@@ -64,14 +65,14 @@ public class PessoaController {
 	}
 	
 	@PutMapping(value="/{id}")
-	public ResponseEntity<PessoaDTO> update(@PathVariable Long id ,@Valid @RequestBody PessoaDTO dto){
-		PessoaDTO newDto = service.updatePessoa(id,dto);
+	public ResponseEntity<ClienteDTO> update(@PathVariable Long id ,@Valid @RequestBody ClienteDTO dto) throws InvalidFormatException{
+		ClienteDTO newDto = service.updateCliente(id,dto);
 			return ResponseEntity.ok().body(newDto); 
 	}
 	
 	@DeleteMapping(value="/{id}")
-	public ResponseEntity<PessoaDTO> delete(@PathVariable Long id){
-		service.deletePessoa(id);
+	public ResponseEntity<ClienteDTO> delete(@PathVariable Long id){
+		service.deleteCliente(id);
 		return ResponseEntity.noContent().build();
 	}
 	

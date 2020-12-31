@@ -6,14 +6,14 @@ import java.time.LocalDate;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-import com.desafio.orange.talents.domain.Pessoa;
+import com.desafio.orange.talents.domain.Cliente;
 
-public class PessoaDTO implements Serializable{
+public class ClienteDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -31,17 +31,17 @@ public class PessoaDTO implements Serializable{
 	
 	
 	@DateTimeFormat(iso = ISO.DATE)
-	@Past(message = "Data de aniversário não pode ser hoje nem futura.")
+	@PastOrPresent(message = "Data de aniversário não pode futura.")
 	@NotNull(message = "Campo data não pode ficar em branco.")
 	private LocalDate birthDate;
 
 
-	public PessoaDTO() {
+	public ClienteDTO() {
 		
 	}
 
 
-	public PessoaDTO(Long id, String name, String email, String cpf, LocalDate birthDate) {
+	public ClienteDTO(Long id, String name, String email, String cpf, LocalDate birthDate) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
@@ -49,12 +49,12 @@ public class PessoaDTO implements Serializable{
 		this.birthDate = birthDate;
 	}
 	
-	public PessoaDTO(Pessoa pessoa) {
-		id = pessoa.getId();
-		name = pessoa.getName();
-		email = pessoa.getEmail();
-		cpf = pessoa.getCpf();
-		birthDate = pessoa.getBirthDate();
+	public ClienteDTO(Cliente cliente) {
+		id = cliente.getId();
+		name = cliente.getName();
+		email = cliente.getEmail();
+		cpf = cliente.getCpf();
+		birthDate = cliente.getBirthDate();
 	}
 
 

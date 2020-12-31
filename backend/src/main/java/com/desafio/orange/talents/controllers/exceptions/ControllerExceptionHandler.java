@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.desafio.orange.talents.services.exceptions.DatabaseException;
 import com.desafio.orange.talents.services.exceptions.ResourceNotFoundException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -21,14 +22,14 @@ public class ControllerExceptionHandler {
 	public ResponseEntity<StandardError> entityNotFound(ResourceNotFoundException e, HttpServletRequest request){
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		
-		StandardError err = new StandardError();
-		err.setTimestamp(Instant.now());
-		err.setStatus(status.value());
-		err.setError("Página não encontrada.");
-		err.setMessage(e.getMessage());
-		err.setPath(request.getRequestURI());
+		StandardError standardError = new StandardError();
+		standardError.setTimestamp(Instant.now());
+		standardError.setStatus(status.value());
+		standardError.setError("Página não encontrada.");
+		standardError.setMessage(e.getMessage());
+		standardError.setPath(request.getRequestURI());
 		
-		return ResponseEntity.status(status).body(err);
+		return ResponseEntity.status(status).body(standardError);
 		
 	}
 	
@@ -37,15 +38,30 @@ public class ControllerExceptionHandler {
 		
 		HttpStatus status = HttpStatus.CONFLICT;
 		
-		StandardError err = new StandardError();
-		err.setTimestamp(Instant.now());
-		err.setStatus(status.value());
-		err.setError("Database exception.");
-		err.setMessage(e.getMessage());
-		err.setPath(request.getRequestURI());
+		StandardError standardError = new StandardError();
+		standardError.setTimestamp(Instant.now());
+		standardError.setStatus(status.value());
+		standardError.setError("Database exception.");
+		standardError.setMessage(e.getMessage());
+		standardError.setPath(request.getRequestURI());
 		
-		return ResponseEntity.status(status).body(err);
+		return ResponseEntity.status(status).body(standardError);
+	}
 		
+		@ExceptionHandler(InvalidFormatException.class)
+		public ResponseEntity<StandardError> invalidFormat(InvalidFormatException e, HttpServletRequest request){
+			
+			HttpStatus status = HttpStatus.BAD_REQUEST;
+			
+			StandardError standardError = new StandardError();
+			standardError.setTimestamp(Instant.now());
+			standardError.setStatus(status.value());
+			standardError.setError("Wrong date format");
+			standardError.setMessage("Por favor digite a data no formato YYYY-MM-DD");
+			standardError.setPath(request.getRequestURI());
+			
+			return ResponseEntity.status(status).body(standardError);
+			
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -53,19 +69,19 @@ public class ControllerExceptionHandler {
 		
 		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
 		
-		ValidationError err = new ValidationError();
-		err.setTimestamp(Instant.now());
-		err.setStatus(status.value());
-		err.setError("Validation exception.");
-		err.setMessage("Error de validação");
-		err.setPath(request.getRequestURI());
+		ValidationError standardError = new ValidationError();
+		standardError.setTimestamp(Instant.now());
+		standardError.setStatus(status.value());
+		standardError.setError("Validation exception.");
+		standardError.setMessage("Error de validação");
+		standardError.setPath(request.getRequestURI());
 		
 		for(FieldError f : e.getBindingResult().getFieldErrors()) {
 			
-			err.addError(f.getField(), f.getDefaultMessage());
+			standardError.addError(f.getField(), f.getDefaultMessage());
 		}
 		
-		return ResponseEntity.status(status).body(err);
+		return ResponseEntity.status(status).body(standardError);
 		
 	}
 }

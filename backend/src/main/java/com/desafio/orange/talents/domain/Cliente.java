@@ -14,8 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Entity
-@Table(name = "tb_pessoa")
-public class Pessoa implements Serializable{
+@Table(name = "tb_cliente")
+public class Cliente implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,11 +36,11 @@ public class Pessoa implements Serializable{
 	@Column(columnDefinition = "DATE", name = "birth_date", nullable = false)
 	private LocalDate birthDate;
 	
-	public Pessoa() {
+	public Cliente() {
 		
 	}
 	
-	public Pessoa(Long id, String name, String email, String cpf, LocalDate birthDate) {
+	public Cliente(Long id, String name, String email, String cpf, LocalDate birthDate) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
@@ -105,7 +105,7 @@ public class Pessoa implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pessoa other = (Pessoa) obj;
+		Cliente other = (Cliente) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
